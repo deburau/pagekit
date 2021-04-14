@@ -23,6 +23,7 @@ ENV PAGEKIT_LOCALE=
 
 WORKDIR $HTML_DIR
 
+ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.8.0/wait /usr/local/bin/
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 ADD https://github.com/pagekit/pagekit/releases/download/${VERSION}/pagekit-${VERSION}.zip /opt/pagekit.zip
 ADD entrypoint.sh /usr/local/bin/
@@ -33,8 +34,9 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* \
     && chmod +x /usr/local/bin/entrypoint.sh \
     && chmod +x /usr/local/bin/install-php-extensions \
+    && chmod +x /usr/local/bin/wait \
     && sync \
-    && install-php-extensions apcu zip \
+    && install-php-extensions apcu_bc pdo_mysql zip \
     && test -d $CONFIG_DIR || mkdir $CONFIG_DIR
 
 LABEL org.label-schema.schema-version="1.0"
