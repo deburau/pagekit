@@ -35,7 +35,10 @@ RUN apk update \
     && chmod +x /usr/local/bin/install-php-extensions \
     && chmod +x /usr/local/bin/wait \
     && sync \
-    && install-php-extensions apcu_bc pdo_mysql zip
+    && install-php-extensions apcu_bc pdo_mysql zip \
+    && sed \
+       -e 's/upload_max_filesize = 2M/upload_max_filesize = 25M/' \
+       "$PHP_INI_DIR/php.ini-production" > "$PHP_INI_DIR/php.ini"
 
 ADD nginx.conf /etc/nginx/nginx.conf
 
