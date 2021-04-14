@@ -17,6 +17,12 @@ if [ ! -f config.php ]
 then
     if [ -n "$PAGEKIT_USERNAME$PAGEKIT_PASSWORD$PAGEKIT_TITLE$PAGEKIT_MAIL$PAGEKIT_DB_DRIVER$PAGEKIT_DB_PREFIX$PAGEKIT_DB_HOST$PAGEKIT_DB_NAME$PAGEKIT_DB_USERNAME$PAGEKIT_DB_PASSWORD$PAGEKIT_LOCALE" ]
     then
+        if [ -n "$WAIT_HOSTS" ]
+        then
+            echo "waiting for database host to bekome ready"
+            /usr/local/bin/wait
+        fi
+
         echo "executing pagekit setup via CLI"
         ./pagekit setup -vvv --no-interaction \
                   ${PAGEKIT_USERNAME:+"--username=${PAGEKIT_USERNAME}"} \
