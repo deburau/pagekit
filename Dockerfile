@@ -1,8 +1,7 @@
 ARG HTML_DIR=/var/www/html
-ARG CONFIG_DIR=/opt/config
 ARG VERSION=1.0.18
 
-FROM php:7-apache
+FROM php:7.2-fpm-alpine
 ARG HTML_DIR
 ARG CONFIG_DIR
 ARG VERSION
@@ -27,17 +26,18 @@ ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.8.0/wait
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 ADD https://github.com/pagekit/pagekit/releases/download/${VERSION}/pagekit-${VERSION}.zip /opt/pagekit.zip
 ADD entrypoint.sh /usr/local/bin/
+ADD start.sh /usr/local/bin/
 
-RUN apt-get update \
-    && apt-get -y install unzip \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* \
+RUN apk update \
+    && apk add nginx \
     && chmod +x /usr/local/bin/entrypoint.sh \
+    && chmod +x /usr/local/bin/start.sh \
     && chmod +x /usr/local/bin/install-php-extensions \
     && chmod +x /usr/local/bin/wait \
     && sync \
-    && install-php-extensions apcu_bc pdo_mysql zip \
-    && test -d $CONFIG_DIR || mkdir $CONFIG_DIR
+    && install-php-extensions apcu_bc pdo_mysql zip
+
+ADD nginx.conf /etc/nginx/nginx.conf
 
 LABEL org.label-schema.schema-version="1.0"
 LABEL org.label-schema.name="pagekit"
@@ -50,6 +50,6 @@ LABEL org.label-schema.version="$VERSION"
 LABEL org.label-schema.docker.cmd="docker run -it -p 8080:80 deburau/pagekit:latest"
 
 EXPOSE 80
-VOLUME ["$HTML_DIR", "$CONFIG_DIR"]
+VOLUME ["$HTML_DIR"]
 ENTRYPOINT ["entrypoint.sh"]
-CMD ["apache2-foreground"]
+CMD ["start.sh"]
