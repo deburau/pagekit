@@ -1,30 +1,3 @@
-# pagekit
-Docker setup for pagekit, the modern Open Source CMS
-
-# Usage
-
-This is a complete example for running pagekit using a MySQL database and running behind a traefik reverse proxy.
-
-Create a `.env` file and adjust content with your information:
-
-```
-PAGEKIT_USERNAME=admin
-PAGEKIT_PASSWORD=<my-secret-password-1>
-PAGEKIT_TITLE=
-PAGEKIT_MAIL=
-PAGEKIT_DB_DRIVER=mysql
-PAGEKIT_DB_PREFIX=
-PAGEKIT_DB_HOST=db
-PAGEKIT_DB_NAME=pagekit
-PAGEKIT_DB_USERNAME=pagekit
-PAGEKIT_DB_PASSWORD=<my-secret-password-2>
-PAGEKIT_LOCALE=
-MYSQL_ROOT_PASSWORD=<my-secret-password-3>
-```
-
-Create a `docker-compose.yaml` file and adjust content with your information:
-
-```yaml
 version: '3'
 
 services:
@@ -84,16 +57,3 @@ networks:
     external: true
   pagekit:
     name: pagekit
-```
-
-Run it with
-
-```sh
-docker-compose up -d
-```
-
-Watch logs with
-
-```sh
-docker-compose logs -f
-```

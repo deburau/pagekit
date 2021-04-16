@@ -42,6 +42,7 @@ RUN apk update \
 
 ADD nginx.conf /etc/nginx/nginx.conf
 
+LABEL maintainer="pagekit@flexoft.net"
 LABEL org.label-schema.schema-version="1.0"
 LABEL org.label-schema.name="pagekit"
 LABEL org.label-schema.description="Docker image for the Pagekit modular and lightweight CMS"
